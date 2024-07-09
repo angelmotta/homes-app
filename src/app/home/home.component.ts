@@ -16,8 +16,25 @@ export class HomeComponent {
   housingService: HousingService = inject(HousingService);
 
   housingLocationList: HousingLocation[] = [];
+  filteredLocationList: HousingLocation[] = [];
 
   constructor() {
     this.housingLocationList = this.housingService.getAllHousingLocations();
+    this.filteredLocationList = this.housingLocationList;
+  }
+
+  filterResults(searchText: string) {
+    if (!searchText) {
+      console.log(`no input search value`);
+      return;
+    }
+    const searchCity = searchText.toLowerCase();
+    console.log(`Search: ${searchCity}`);
+    const results = this.housingLocationList.filter((houseObj) => {
+      const cityHouse = houseObj.city?.toLowerCase();
+      if (!cityHouse) return;
+      return cityHouse.includes(searchCity);
+    });
+    this.filteredLocationList = results;
   }
 }
